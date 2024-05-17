@@ -5,6 +5,10 @@
    Результаты сравнительного исследования времени вычисления представить в табличной и графической форме в виде отчета по лабораторной работе.
 7.	F(1) = G(1) = 19; F(n) = (-1)n*((3*F(n–1) – 2*G(n–1)), G(n) = (n–1)! + 2*G(n–1), при n >=2"""
 
+"""стандорное ограничение на кол-во знаков для вывода за раз 4300 ,
+у нас прибольших значениях n (например 2000 )ответ по количеству знаков упирается в это ограничение,поэтому мы его убираем """
+import sys
+sys.set_int_max_str_digits(0)
 
 import math
 import time
@@ -24,14 +28,14 @@ ans=1
 """шаг графика"""
 step=-1
 
-def rec_f(x,one):
-
+def rec_f(x):
+    global one
     if x == 1:
         return 19
 
     else:
         one *= -1
-        return one*(((3*rec_f(x-1,one)) - (2*rec_g(x-1))))
+        return one*(((3*rec_f(x-1)) - (2*rec_g(x-1))))
 
 
 def rec_g(x):
@@ -74,10 +78,10 @@ def iter_factor(n,fact_iter):
 
     for i in range(1,n+1):
 
-        if fact_iter[n]==0 and fact_iter[n-1]==0:#если предидущего значения нету вычисляем
+        if fact_iter[n]==1 and fact_iter[n-1]==1:#если предидущего значения нету вычисляем
             fact_iter[i] = fact_iter[i-1] * i
 
-        elif fact_iter[n]==0 and fact_iter[n-1]!=0:#вычисляем новый факториал как произведение имеющегося на число от когорого мы ищем факториал
+        elif fact_iter[n]==1 and fact_iter[n-1]!=1:#вычисляем новый факториал как произведение имеющегося на число от когорого мы ищем факториал
                 fact_iter[n]=fact_iter[n-1] * n
 
         else:
@@ -87,14 +91,15 @@ def iter_factor(n,fact_iter):
 
 """итерация"""
 def it_f(n,fact_iter):
-    cata_f = [n] * 3
-    cata_g = [n] * 3
-    one = 1
+    global one
+    global cata_g
+    global cata_f
+
     if n == 1:
         return 19
-    for i in range(2,n+1):
+    for i in range(n,n+1): #цикл идет только один раз используя предидущее значение функции
         one *= -1
-        cata_g[1] = iter_factor(cata_g[0]-1,fact_iter)
+        cata_g[1] = iter_factor(i-1,fact_iter)+(2 * cata_g[0])
         cata_f[-1] = (one *( (3 * cata_f[1])-( 2 * cata_g[1] ) ) )
         cata_f[0], cata_f[1] = cata_f[1], cata_f[2]
         cata_g[0], cata_g[1] = cata_g[1], cata_g[2]
@@ -124,12 +129,15 @@ if (n >=  33 and (k == 0 or k == 2)) or (n >= 5000 and (k == 1 or k == 2)):
         ans = int(input())
 fact_iter = [0] * (n + 1)
 
+"""списки для итерации"""
+cata_f = [2] * 3
+cata_g = [2] * 3
 
 if k == 0 and ans == 1:
 
     for i in graf:
         start = time.time()
-        res = rec_f(i,one)
+        res = rec_f(i)
         end = time.time()
         timer.append(end-start)
         rec_times = end - start
@@ -161,7 +169,7 @@ if k == 2 and ans == 1:
         end = time.time()
         timer.append(end-start)
         start_rec = time.time()
-        res = rec_f(i,one)
+        res = rec_f(i)
         end_rec = time.time()
         timer_rec.append(end_rec-start_rec)
         rec_times = end_rec-start_rec
