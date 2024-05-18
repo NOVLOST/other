@@ -5,10 +5,7 @@
    Результаты сравнительного исследования времени вычисления представить в табличной и графической форме в виде отчета по лабораторной работе.
 7.	F(1) = G(1) = 19; F(n) = (-1)n*((3*F(n–1) – 2*G(n–1)), G(n) = (n–1)! + 2*G(n–1), при n >=2"""
 
-"""стандорное ограничение на кол-во знаков для вывода за раз 4300 ,
-у нас прибольших значениях n (например 2000 )ответ по количеству знаков упирается в это ограничение,поэтому мы его убираем """
-import sys
-sys.set_int_max_str_digits(0)
+
 
 import math
 import time
@@ -29,6 +26,7 @@ ans=1
 step=-1
 
 def rec_f(x):
+    global fact
     global one
     if x == 1:
         return 19
@@ -39,54 +37,44 @@ def rec_f(x):
 
 
 def rec_g(x):
-
+    global fact
     if x==1:
 
         return 19
 
     else:
 
-        return factor_wrap(x-1)
+        return factor(x-1)
 
 """обертка для кэша"""
-def factor_wrap(n):
 
-    fact = [0] * (n+1)#cсоздаем список для хранения фактоиалов
-
-    return factor(n,fact)
 
 """факториал рекурсивный"""
-def factor(n,fact):
+def factor(n):
 
-
+    global fact
     if n == 1:
 
         return 1
 
-    elif fact[n] == 0:#если факториал не имеется вычисляем его
 
-        fact[n] = n * factor(n - 1,fact)#
-        return n * factor(n - 1,fact)
+    fact[1] = fact[0] * n
+    fact[0], fact[1] = fact[1], fact[-1]
+    return  factor(n - 1)
 
-    else:#иначе возвращаем
-
-        return fact[n]
 
 """факториал итерационный"""
 def iter_factor(n,fact_iter):
 
 
-    for i in range(1,n+1):
+    for i in range(n,n+1): #цикл идет только один раз используя прдеидущее значение
 
-        if fact_iter[n]==1 and fact_iter[n-1]==1:#если предидущего значения нету вычисляем
-            fact_iter[i] = fact_iter[i-1] * i
+            fact_iter[1] = fact_iter[0] * i
+            fact_iter[0],fact_iter[1]=fact_iter[1],fact_iter[-1]
 
-        elif fact_iter[n]==1 and fact_iter[n-1]!=1:#вычисляем новый факториал как произведение имеющегося на число от когорого мы ищем факториал
-                fact_iter[n]=fact_iter[n-1] * n
 
-        else:
-             return fact_iter[n] #если значение уже вычисленно просто возвращаем его
-    return fact_iter[n]
+
+    return fact_iter[1]
 
 
 """итерация"""
@@ -127,8 +115,11 @@ if (n >=  33 and (k == 0 or k == 2)) or (n >= 5000 and (k == 1 or k == 2)):
     while ans != 1 and ans != 0:
         print("работа программы может занять большое время ,вы хотите продолжить? \n 1=да 0=нет")
         ans = int(input())
-fact_iter = [0] * (n + 1)
 
+
+"""список для факториала """
+fact_iter = [1] * (3)
+fact = [1] * (3)
 """списки для итерации"""
 cata_f = [2] * 3
 cata_g = [2] * 3
