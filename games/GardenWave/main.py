@@ -111,7 +111,8 @@ while True :
 
     # рисуем коллизию игрока
     joe_rect = joe.avatar.get_rect(topleft = (joe.coordinate_X  ,joe.coordinate_Y))
-    scope = py.draw.rect(game_window.display_set_mode, (255, 255, 0), ((joe.coordinate_X + 100) - (joe.coordinate_X % 100), (joe.coordinate_Y + 100) - (joe.coordinate_Y % 100), 20, 20),3)
+    if (joe.coordinate_X + 100) - (joe.coordinate_X % 100) >= 300:
+        scope = py.draw.rect(game_window.display_set_mode, (255, 255, 0), ((joe.coordinate_X + 100) - (joe.coordinate_X % 100), (joe.coordinate_Y + 100) - (joe.coordinate_Y % 100), 20, 20),3)
 
 
     #==================================================
@@ -163,7 +164,8 @@ while True :
 
     game_window.display_set_mode.blit(joe.avatar, (joe.coordinate_X, joe.coordinate_Y))
     #прицел
-    scope = py.draw.rect(game_window.display_set_mode, (255, 255, 0), ((joe.coordinate_X + 100) - (joe.coordinate_X % 100), (joe.coordinate_Y + 100) - (joe.coordinate_Y % 100), 20, 20),3)
+    if (joe.coordinate_X + 100) - (joe.coordinate_X % 100) >=300:
+        scope = py.draw.rect(game_window.display_set_mode, (255, 255, 0), ((joe.coordinate_X + 100) - (joe.coordinate_X % 100), (joe.coordinate_Y + 100) - (joe.coordinate_Y % 100), 20, 20),3)
 
     #счетчик очков игрока
     game_window.display_set_mode.blit(joe.font.render(f"Score:{joe.score}",False, 'white'  ),(50,50))
