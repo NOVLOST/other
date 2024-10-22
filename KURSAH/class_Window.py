@@ -32,8 +32,6 @@ class Window(): # окно на котом все рисуется
     def resize_canvas(self):
         global img , new_img, img_resize
 
-
-
         img = Image.open('table1.png')
         img_resize = img.resize((self.width//2,self.width//2))
         new_img = ImageTk.PhotoImage(img_resize)
@@ -41,11 +39,6 @@ class Window(): # окно на котом все рисуется
         self.canvas.create_image(0, 0, anchor='nw', image=new_img)
 
 
-
-
-
         self.canvas.place(x=0, y=0)
-
-
 
 win = Window()
