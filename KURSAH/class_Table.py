@@ -1,9 +1,10 @@
 
 
 import math
-from traceback import print_tb
+
 
 from class_Window import *
+
 
 coordinate_list = [] #данные из файла
 table_list = [] #таблицы с целями
@@ -12,6 +13,9 @@ headrs = ('Время','Xo', 'Yo', 'Пелинг','Дистанция','X','Y')#
 page = 0 #страницы с таблицами целей
 time_list = [] # в нем хранится время в которое были запеленгованы цели
 time_selected = [] #выбранное время для передачи на отрисовку целей с таким же временем
+label_index_of_target = Label(win.root, text='', fg="black", bg='#007241',
+                                      height=2)
+case_for_label_index_of_target = []
 
 class Table():
 
@@ -20,6 +24,7 @@ class Table():
     #создание таблицы
     def table_init(self,header,height):
         self.tree = ttk.Treeview(height=height, show="headings",selectmode="extended", columns=header)
+
 
         for head in header:#текст заголовков
             self.tree.heading(head, text=head, anchor='center')
@@ -96,43 +101,80 @@ def read_cvs(file_name):
 
 
 def forward_draw_table():#страница вперед
-    global page
+    global page,label_index_of_target
 
-    if ((page + 1) * 5 ) + 5 <= len(table_list):#проверяем умешаемся ли мы в размер списка
+    if ((page + 2) * 5 ) - len(table_list) < 4:
         page += 1
 
-    coordinate_multiplier = 0.1  # пробел между таблицами
+
+        coordinate_multiplier = 0.1  # пробел между таблицами
+
+        for i in case_for_label_index_of_target:
+            i.place_forget()
+
+        case_for_label_index_of_target.clear()
+
+        for i in range((page-1) * 5, (page ) * 5):
+            try:
+                table_list[i].tree.place_forget()
 
 
-    for i in range(page * 5,(page * 5) + 5):
-    # рисуем ее на экране
+            except:
+                break
 
-        table_list[i].tree.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier)
-        coordinate_multiplier += 0.1
+        for i in range(page * 5,(page * 5) + 5):
+        # рисуем ее на экране
+            try:
+                label_index_of_target = Label(win.root, text=f'цель №{table_list[i].target_index}', fg="black",
+                                              bg='#007241',
+                                              height=2)
+                case_for_label_index_of_target.append(label_index_of_target)
+                label_index_of_target.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier - 100)
+                table_list[i].tree.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier - 60)
+                coordinate_multiplier += 0.12
+            except:
+                break
 
-    win.root.update()
+        win.root.update()
 
 
 
 
 def back_draw_table():#рисуем на экране
-    global page
+    global page,label_index_of_target
     if page - 1 >= 0:#проверяем умешаемся ли мы в размер списка
 
         page -= 1
 
-    coordinate_multiplier = 0.1  # пробел между таблицами
 
-    for i in range((page+1) * 5,((page + 1) * 5) + 5):
-        table_list[i].tree.place_forget()
+        coordinate_multiplier = 0.1  # пробел между таблицами
 
-    for i in range(page * 5, (page + 1) * 5):
-        # рисуем ее на экране
+        for i in case_for_label_index_of_target:
+            i.place_forget()
 
-        table_list[i].tree.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier)
-        coordinate_multiplier += 0.1
+        case_for_label_index_of_target.clear()
 
-    win.root.update()#обновляем экран
+        for i in range((page+1) * 5,((page + 2) * 5)):
+            try:
+                table_list[i].tree.place_forget()
+
+            except:
+                break
+
+        for i in range(page * 5, (page + 1) * 5):
+            # рисуем ее на экране
+            try:
+                label_index_of_target = Label(win.root, text=f'цель №{table_list[i].target_index}', fg="black", bg='#007241',
+                                              height=2)
+                case_for_label_index_of_target.append(label_index_of_target)
+                label_index_of_target.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier - 100)
+                table_list[i].tree.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier - 60)
+
+                coordinate_multiplier += 0.12
+            except:
+
+                break
+        win.root.update()#обновляем экран
 
 
 
@@ -146,28 +188,53 @@ def select_time(event):#выбор времени и поиск соответс
 
         value = time_tab.tree.item(i, option="values")
         time_selected.append(value)
+        print(value)
 
     for time in time_selected:#поиск соответсвия времени в таблице
         for tab in table_list:
 
             id = tab.tree.get_children("")
-            tab_time = tab.tree.item(id,option = 'values'  )
-            print(tab_time)
+            print(id)
+            for i in id:
 
-            if time[0] == tab_time[0]:
-
-                xo = tab_time[1]#наши коорды
-                yo = tab_time[2]
-
-                xm = tab_time[-2]#коорды маяка
-                ym = tab_time[-1]
-
-                xt = round(float(tab_time[-4])) #коорды цели
-                yt = round(float(tab_time[-3]))
-
-                win.draw_canvas(xo,yo,xm,ym,xt,yt)#рисуем объекты
+                tab_time = tab.tree.item(i,option = 'values'  )
 
 
+                if time[0] == tab_time[0]:
+
+                    xo = tab_time[1]#наши коорды
+                    yo = tab_time[2]
+
+                    xm = tab_time[-2]#коорды маяка
+                    ym = tab_time[-1]
+
+                    xt = round(float(tab_time[-4])) #коорды цели
+                    yt = round(float(tab_time[-3]))
+
+                    win.draw_canvas(xo,yo,xm,ym,xt,yt,tab.target_index)#рисуем объекты
+
+def plus_change_scale():
+
+
+        # без разницы на что ориентироваться в плане числа для определения границы.
+    if win.distance_scale + 1 < 20 :
+
+            win.circle_scale += 1
+            win.distance_scale += 1
+            select_time('e')
+
+
+def minus_change_scale():
+
+    if win.distance_scale - 1 > 0:
+
+            win.circle_scale -= 1
+            win.distance_scale -= 1
+            select_time('e')
+
+def call_select_time():
+
+    select_time('e')
 
 
 #---------------------------------------------------------------------------------------------------
@@ -232,7 +299,7 @@ def calculation():
 
         #5.координаты  цели
         y_target_coordinate = (distance_to_target * math.sin(math.radians(90 - me_peling)))
-        x_target_coordinate = (distance_to_target * math.cos(math.radians(90 - me_peling))) + xo
+        x_target_coordinate = (distance_to_target * math.cos(math.radians(90 - me_peling)))
 
 
         return (round(distance_to_target,2),round(x_target_coordinate,2),round(y_target_coordinate,2))
