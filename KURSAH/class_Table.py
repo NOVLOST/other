@@ -147,34 +147,34 @@ def back_draw_table():#рисуем на экране
         page -= 1
 
 
-        coordinate_multiplier = 0.1  # пробел между таблицами
+    coordinate_multiplier = 0.1  # пробел между таблицами
 
-        for i in case_for_label_index_of_target:
-            i.place_forget()
+    for i in case_for_label_index_of_target:
+        i.place_forget()
 
-        case_for_label_index_of_target.clear()
+    case_for_label_index_of_target.clear()
 
-        for i in range((page+1) * 5,((page + 2) * 5)):
-            try:
-                table_list[i].tree.place_forget()
+    for i in range((page+1) * 5,((page + 2) * 5)):
+        try:
+            table_list[i].tree.place_forget()
 
-            except:
-                break
+        except:
+            break
 
-        for i in range(page * 5, (page + 1) * 5):
-            # рисуем ее на экране
-            try:
-                label_index_of_target = Label(win.root, text=f'цель №{table_list[i].target_index}', fg="black", bg='#007241',
+    for i in range(page * 5, (page + 1) * 5):
+        # рисуем ее на экране
+        try:
+            label_index_of_target = Label(win.root, text=f'цель №{table_list[i].target_index}', fg="black", bg='#007241',
                                               height=2)
-                case_for_label_index_of_target.append(label_index_of_target)
-                label_index_of_target.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier - 100)
-                table_list[i].tree.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier - 60)
+            case_for_label_index_of_target.append(label_index_of_target)
+            label_index_of_target.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier - 100)
+            table_list[i].tree.place(x=win.width // 2 + 20, y=win.height * coordinate_multiplier - 60)
 
-                coordinate_multiplier += 0.12
-            except:
+            coordinate_multiplier += 0.12
+        except:
 
-                break
-        win.root.update()#обновляем экран
+            break
+    win.root.update()#обновляем экран
 
 
 
@@ -303,5 +303,3 @@ def calculation():
 
 
         return (round(distance_to_target,2),round(x_target_coordinate,2),round(y_target_coordinate,2))
-
-
