@@ -23,16 +23,16 @@ label_scale = Label(win.root, text=f'{win.distance_scale}', fg="black", bg='#007
 
 win.init_canvas()#инициализация радара
 
-forward.place(x = win.get_width() - (win.get_width() // 3 ) ,y = win.get_height() // 2 + (win.get_height() // 3) )
-back.place(x = win.get_width() - (win.get_width() // 3 ) - 100,y =win.get_height() // 2 + (win.get_height() // 3) )
+forward.place(x = win.get_width() - (win.get_width() // 3 ) + 48,y = win.get_height() // 2 + (win.get_height() // 3) )
+back.place(x = win.get_width() - (win.get_width() // 3 ) - 30,y =win.get_height() // 2 + (win.get_height() // 3) )
 
-time_tab.tree.place(x = win.get_width() - (win.get_width() // 3 ) - 200,y =win.get_height() // 2 + (win.get_height() // 3)- 250)
+time_tab.tree.place(x = win.get_width() - (win.get_width() // 3 ) - 200,y =win.get_height() // 2 + (win.get_height() // 3)- 220)
 
-scale_plus.place(x = win.get_width() - (win.get_width() // 3 ) + 120 ,y = win.get_height() // 2 + (win.get_height() // 3) - 100 )
-scale_minus.place(x = win.get_width() - (win.get_width() // 3 ) + 120 ,y = win.get_height() // 2 + (win.get_height() // 3) )
+scale_plus.place(x = win.get_width() - (win.get_width() // 3 ) + 220 ,y = win.get_height() // 2 + (win.get_height() // 3) - 100 )
+scale_minus.place(x = win.get_width() - (win.get_width() // 3 ) + 220 ,y = win.get_height() // 2 + (win.get_height() // 3) )
 
-check_show_label_name.place(x = win.get_width() - (win.get_width() // 3 )  - 100 ,y = win.get_height() // 2 + (win.get_height() // 3) - 100 )
-win.label_scale.place(x = win.get_width() - (win.get_width() // 3 ) + 150 ,y = win.get_height() // 2 + (win.get_height() // 3) - 50)
+check_show_label_name.place(x = win.get_width() - (win.get_width() // 3 )  - 30 ,y = win.get_height() // 2 + (win.get_height() // 3) - 25 )
+win.label_scale.place(x = win.get_width() - (win.get_width() // 3 ) + 240 ,y = win.get_height() // 2 + (win.get_height() // 3) - 50)
 
 
 win.root.bind('<<TreeviewSelect>>', select_time )# действия по нажатию на кнопку мыши.
