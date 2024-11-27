@@ -59,6 +59,17 @@ def read_cvs(file_name):
 
                 else:#если не кончился
 
+                    #Дешифровка (Шифр Цезаря на 3 символа вперед)
+                    for i in range(0,len(coordinate_list)):
+                        if i == len(coordinate_list)-1:
+                            coordinate_list[i] = int(coordinate_list[i]) - int("3" * (len(coordinate_list[i]) - 1))
+
+                        else:
+                            coordinate_list[i] = int(coordinate_list[i]) - int("3" * len(coordinate_list[i]))
+                        print(coordinate_list[i])
+
+
+
                     if coordinate_list[-1] not in index_of_targets:#добавляем новую цель
 
                         index_of_targets.append(coordinate_list[-1])#закидываем ее индекс в список
@@ -103,7 +114,7 @@ def read_cvs(file_name):
 def forward_draw_table():#страница вперед
     global page,label_index_of_target
 
-    if ((page + 2) * 5 ) - len(table_list) < 4:
+    if ((page + 2) * 5 ) - len(table_list) <= 4:
         page += 1
 
 
