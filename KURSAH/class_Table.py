@@ -16,6 +16,19 @@ time_selected = [] #выбранное время для передачи на �
 label_index_of_target = Label(win.root, text='', fg="black", bg='#007241',
                                       height=2)
 case_for_label_index_of_target = []
+crypto_cesar = {
+    '0': '7',
+    '1': '8',
+    '2': '9',
+    '3': '0',
+    '4': '1',
+    '5': '2',
+    '6': '3',
+    '7': '4',
+    '8': '5',
+    '9': '6',
+
+}
 
 class Table():
 
@@ -58,15 +71,18 @@ def read_cvs(file_name):
 
 
                 else:#если не кончился
-
+                    encrypt_num = ''
                     #Дешифровка (Шифр Цезаря на 3 символа вперед)
                     for i in range(0,len(coordinate_list)):
-                        if i == len(coordinate_list)-1:
-                            coordinate_list[i] = int(coordinate_list[i]) - int("3" * (len(coordinate_list[i]) - 1))
+                        for num in coordinate_list[i]:
+                            try:
+                                encrypt_num += crypto_cesar[num]
 
-                        else:
-                            coordinate_list[i] = int(coordinate_list[i]) - int("3" * len(coordinate_list[i]))
-                        print(coordinate_list[i])
+                            except:
+                                pass
+                        coordinate_list[i] = encrypt_num
+
+                        encrypt_num = ''
 
 
 
@@ -278,39 +294,52 @@ def calculation():
 
         leg_a = max(xo,xm) - min(xo,xm)
         leg_b = max(yo, ym) - min(yo, ym)
+        print(leg_a)
 
         #1. наохдим гипотенузу
         hypotenuse = ((leg_a**2) + (leg_b**2))**0.5
 
+
         sin_b = (leg_a / hypotenuse)
         #находим смежный угол от маяка в прямоугольном треугольнике
         rigTri_angle_mayak_in_degrees = math.degrees(math.asin(sin_b))
+        print(rigTri_angle_mayak_in_degrees,"rta")
 
 
         mayak_peling = int(coordinate_list[6])
 
         # 2.угол в тругольике относительно маяка
         interior_angel_mayak = 180 -  (mayak_peling + rigTri_angle_mayak_in_degrees)
+        print(interior_angel_mayak)
 
 
         sin_a = (leg_b / hypotenuse)
 
         # 3.находим смежный угол от нас в прямоугольном треугольнике
         rigTri_angle_me_in_degrees = math.degrees(math.asin(sin_a))
+        print(rigTri_angle_me_in_degrees,"rigTri")
 
 
         me_peling = int(coordinate_list[3])
 
 
         interior_angel_me = (90 -  rigTri_angle_me_in_degrees) + me_peling
+        print(interior_angel_me,"inter")
         # угол в тругольике относительно нас
 
-        # 4.динтация до цели
-        distance_to_target = (hypotenuse * math.sin(math.radians(interior_angel_me))) / math.sin(math.radians(interior_angel_mayak))
+        # # 4.динтация до цели
+        # distance_to_target = (hypotenuse * math.sin(math.radians(interior_angel_me))) / math.sin(math.radians(interior_angel_mayak))
+        # print(sin_a,sin_b,"sins")
+
+        distance_to_target = (hypotenuse * math.sin(math.radians(interior_angel_mayak))) / math.sin(
+            math.radians(180 - (interior_angel_me + interior_angel_mayak)))
 
         #5.координаты  цели
-        y_target_coordinate = (distance_to_target * math.sin(math.radians(90 - me_peling)))
-        x_target_coordinate = (distance_to_target * math.cos(math.radians(90 - me_peling)))
+
+        y_target_coordinate =  yo +(distance_to_target * math.sin(math.radians(90-me_peling)))
+        x_target_coordinate =  xo +(distance_to_target * math.cos(math.radians(90-me_peling)))
+
+        print(x_target_coordinate,y_target_coordinate)
 
 
         return (round(distance_to_target,2),round(x_target_coordinate,2),round(y_target_coordinate,2))
