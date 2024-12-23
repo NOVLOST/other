@@ -1,7 +1,7 @@
 
 
 import math
-
+from tkinter.messagebox import showerror, showwarning, showinfo
 
 from class_Window import *
 
@@ -67,6 +67,7 @@ def read_cvs(file_name):
 
 
                 if len(coordinate_list)==1:#если файл кончился
+                    showinfo(title="Информация", message="Файл прочитан")
                     break
 
 
